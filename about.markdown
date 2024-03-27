@@ -6,7 +6,7 @@ title: About
 
 ## Who is Tiago "Myhro" Ilieve?
 
-Bachelor of Science in Information Systems by the Computer Science Department (DCC) of the State University of Montes Claros ([Unimontes][unimontes]). Currently works as Software Engineer at [Toggl][toggl].
+Bachelor of Science in Information Systems by the Computer Science Department (DCC) of the State University of Montes Claros ([Unimontes][unimontes]).
 
 E-mail: [contato@myhro.info][email]  
 GitHub: [myhro][github]  
@@ -20,6 +20,5 @@ All texts published here are available under [Creative Commons Attribution 4.0 I
 [email]: mailto:contato@myhro.info
 [github]: https://github.com/myhro
 [linkedin]: https://www.linkedin.com/in/myhro/
-[toggl]: https://toggl.com/
 [twitter]: https://twitter.com/myhro
 [unimontes]: http://www.unimontes.br/
