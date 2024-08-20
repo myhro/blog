@@ -11,7 +11,6 @@ Bachelor of Science in Information Systems by the Computer Science Department (D
 E-mail: [contato@myhro.info][email]  
 GitHub: [myhro][github]  
 LinkedIn: [myhro][linkedin]  
-Twitter: [@myhro][twitter]
 
 All texts published here are available under [Creative Commons Attribution 4.0 International (CC BY 4.0)][cc-by-4] license.
 
