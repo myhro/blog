@@ -100,30 +100,31 @@ Finished, time 25m20s,  835 GiB written, speed 562.6 MiB/s
 When encryption finishes, open it as a regular device and expand the filesystem to fill the partition again. This will use all available space minus what was reserved for the LUKS header.
 
 ```
-# cryptsetup open /dev/md3 recrypt
+# cryptsetup open /dev/md3 md3_crypt
 Enter passphrase for /dev/md3:
-# resize2fs /dev/mapper/recrypt
+# resize2fs /dev/mapper/md3_crypt
 resize2fs 1.47.0 (5-Feb-2023)
-Resizing the filesystem on /dev/mapper/recrypt to 218916864 (4k) blocks.
-The filesystem on /dev/mapper/recrypt is now 218916864 (4k) blocks long.
+Resizing the filesystem on /dev/mapper/md3_crypt to 218916864 (4k) blocks.
+The filesystem on /dev/mapper/md3_crypt is now 218916864 (4k) blocks long.
 ```
 
-Mount the device and update both `/etc/crypttab` and `/etc/fstab`. The former should refer to the filesystem UUID, but the latter can just point to the `/dev/mapper/recrypt` device, since it will use the name defined in crypttab.
+Mount the device and update both `/etc/crypttab` and `/etc/fstab`. The former should refer to the filesystem UUID, but the latter can just point to the `/dev/mapper/md3_crypt` device, since it will use the name defined in crypttab.
 
 ```
-# mount /dev/mapper/recrypt /mnt/
+# mount /dev/mapper/md3_crypt /mnt/
+```
+```
 # blkid | grep /dev/md3
 /dev/md3: UUID="a9c05676-6aa5-4a7b-acc9-a5eca5de4fed" TYPE="crypto_LUKS"
 ```
-
 ```
 # cat /mnt/etc/crypttab
 # <target name> <source device>         <key file>      <options>
-recrypt UUID=a9c05676-6aa5-4a7b-acc9-a5eca5de4fed none luks,discard
+md3_crypt UUID=a9c05676-6aa5-4a7b-acc9-a5eca5de4fed none luks,discard
 ```
 ```
 # cat /mnt/etc/fstab
-/dev/mapper/recrypt     /       ext4    defaults        0       1
+/dev/mapper/md3_crypt   /       ext4    defaults        0       1
 UUID=5bc9cb1c-6607-429d-9219-3675ee773b12       /boot   ext4    defaults        0       0
 LABEL=EFI_SYSPART       /boot/efi       vfat    defaults        0       1
 ```
@@ -153,30 +154,30 @@ BusyBox v1.37.0 (Debian 1:1.37.0-6+b3) built-in shell (ash)
 Enter 'help' for a list of built-in commands.
 
 ~ # cryptroot-unlock
-Please unlock disk recrypt:
-cryptsetup: recrypt set up successfully
+Please unlock disk md3_crypt:
+cryptsetup: md3_crypt set up successfully
 ```
 
 Finally, the machine should now be online and running with full disk encryption, except for `/boot` and the ESP partition.
 
 ```
 $ sudo lsblk
-NAME          MAJ:MIN RM   SIZE RO TYPE  MOUNTPOINTS
-nvme1n1       259:0    0 419.2G  0 disk
-├─nvme1n1p1   259:1    0   511M  0 part  /boot/efi
-├─nvme1n1p2   259:2    0     1G  0 part
-│ └─md2         9:2    0  1022M  0 raid1 /boot
-└─nvme1n1p3   259:3    0 417.7G  0 part
-  └─md3         9:3    0 835.1G  0 raid0
-    └─recrypt 253:0    0 835.1G  0 crypt /
-nvme0n1       259:4    0 419.2G  0 disk
-├─nvme0n1p1   259:5    0   511M  0 part
-├─nvme0n1p2   259:6    0     1G  0 part
-│ └─md2         9:2    0  1022M  0 raid1 /boot
-├─nvme0n1p3   259:7    0 417.7G  0 part
-│ └─md3         9:3    0 835.1G  0 raid0
-│   └─recrypt 253:0    0 835.1G  0 crypt /
-└─nvme0n1p4   259:8    0     2M  0 part
+NAME            MAJ:MIN RM   SIZE RO TYPE  MOUNTPOINTS
+nvme1n1         259:0    0 419.2G  0 disk
+├─nvme1n1p1     259:1    0   511M  0 part  /boot/efi
+├─nvme1n1p2     259:2    0     1G  0 part
+│ └─md2           9:2    0  1022M  0 raid1 /boot
+└─nvme1n1p3     259:3    0 417.7G  0 part
+  └─md3           9:3    0 835.1G  0 raid0
+    └─md3_crypt 253:0    0 835.1G  0 crypt /
+nvme0n1         259:4    0 419.2G  0 disk
+├─nvme0n1p1     259:5    0   511M  0 part
+├─nvme0n1p2     259:6    0     1G  0 part
+│ └─md2           9:2    0  1022M  0 raid1 /boot
+├─nvme0n1p3     259:7    0 417.7G  0 part
+│ └─md3           9:3    0 835.1G  0 raid0
+│   └─md3_crypt 253:0    0 835.1G  0 crypt /
+└─nvme0n1p4     259:8    0     2M  0 part
 ```
 
 The process may be a bit more involved than installing the OS from scratch using built-in encryption options. Still, it's not too complex, provided you don't skip any steps. It's definitely better than running a machine outside of your physical reach that stores everything in plain text.
