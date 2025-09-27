@@ -29,7 +29,7 @@ Do a regular Debian 13 (Trixie) installation using the [OVH web installer][insta
 After the installation is finished, log in to the new system and install the required packages to boot it. The `dropbear-initramfs` package is what allows us to unlock the encrypted root partition via SSH. For it to work, you need to set its own `authorized_keys` file, since it won't have access to anything on disk before unlocking.
 
 ```
-$ sudo apt install cryptsetup cryptsetup-initramfs dropbear-initramfs
+$ sudo apt install cryptsetup-initramfs dropbear-initramfs
 (...)
 $ sudo vim /etc/dropbear/initramfs/authorized_keys
 ```
